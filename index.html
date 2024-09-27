@@ -3,6 +3,15 @@
     <head>
         <meta charset="UTF-8">
         <title>커스텀 웹 서버 제작</title>
-
     </head>
+    <body>
+        <div id="index">
+
+        </div>
+    <script type="module">
+        import {App} from "./App.js"
+
+        document.getElementById("index").innerHTML = App();
+    </script>
+    </body>
 </html>

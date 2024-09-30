@@ -12,6 +12,11 @@ const server = http.createServer(function (req, res) {
 
     console.log(url);
 
+    if(url === "/favicon.ico"){
+        res.status = 404;
+        return res.end();
+    }
+
     if(url === "/"){
         fs.readFile("index.html", function(err, data) {
             if(err){
@@ -42,7 +47,7 @@ const server = http.createServer(function (req, res) {
                 res.end(`Error loading ${url}`);
             } else {
                 if(ext === ".js" || ext === ".mjs"){
-                    res.writeHead(200, {"Content-Type" : "text/javascript"});
+                    res.writeHead(200, {"Content-Type" : "application/javascript"});
                     res.end(data);
                 } else if(ext === ".css") {
                     res.writeHead(200, {"Content-Type" : "text/css"})

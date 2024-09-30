@@ -1,5 +1,8 @@
-// import sheet from "./test.css"
+import {test2} from "./test2.js"
+
+getCss("./test.css", import.meta.url);
 
 export function test(){
-    return "asdf";
+    return `${test2()}`;
 }
+

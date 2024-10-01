@@ -12,23 +12,29 @@ class AppTest extends HTMLElement {
         console.log(this.style);
         this.setAttribute("number", "1");
 
-        this._internals.statechange
         console.dir(this.getAttributeNode("number"));
 
         this.number = parseInt(this.getAttribute("number"));
-        
+
+        const [state, setState] = useState(0);
+        this.state = state;
+        this.setState = setState;
+
         this.addEventListener("click", function (event) {
             console.log(this.number);
 
-            this.setAttribute("number", this.number + 1);
+            console.dir(event);
+
+            console.log(event.target);
+
+            this.setState(this.state() - 1);
+
+            console.log(this.state());
+
+            this.number = this.number + 1;
         })
 
-    }
 
-    onChangeNumber = (e) => {
-        e.target.innerText = this.number;
-
-        console.dir(e);
     }
 
     static observedAttributes = ["number"];
@@ -43,8 +49,13 @@ class AppTest extends HTMLElement {
             `
             <div style='color: red'>
                 ${test()} <br/>
-                <div onclick="this.onChangeNumber()">
+                <div>
+                    this.number <br/>
                     ${this.number}
+                </div>
+                <div>
+                    state <br/>
+                    ${this.state}
                 </div>
             </div>
             `
@@ -67,8 +78,12 @@ class AppTest extends HTMLElement {
             `
             <div style='color: red'>
                 ${test()} <br/>
-                <div onclick="this.onChangeNumber()">
+                <div>
                     ${this.number}
+                </div>
+                <div>
+                    state <br/>
+                    ${this.state}
                 </div>
             </div>
             `

@@ -3,18 +3,16 @@
     <head>
         <meta charset="UTF-8">
         <title>커스텀 웹 서버 제작</title>
-        <script type="defer" src="./App.js"></script>
+        <script type="module" src="./App.js"></script>
         <script src="./modules/getCss.js"></script>
         <script src="./modules/useState.js"></script>
     </head>
     <body>
         <div id="index">
-
         </div>
-    <script type="module">
-        import {App} from "./App.js"
+    <script>
 
-        document.getElementById("index").innerHTML = App();
+        document.getElementById("index").innerHTML = "<init-component></init-component>"
     </script>
     </body>
 </html>

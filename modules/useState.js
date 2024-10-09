@@ -6,7 +6,7 @@ class CustomEventTarget extends EventTarget {
     }
 
     setSecret = (newSecret) => {
-        this._secret = newSecret
+        this._secret = newSecret;
     }
 
     getSecret = () => {
@@ -19,7 +19,7 @@ const useState = (value) => {
     const customEventTarget = new CustomEventTarget(value);
 
 
-    return [customEventTarget.getSecret, customEventTarget.setSecret];
+    return [() => customEventTarget.getSecret(), customEventTarget.setSecret];
 }
 
 window.useState = useState;

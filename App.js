@@ -1,9 +1,18 @@
 import {test} from "./test/test.mjs";
 
 class AppTest extends HTMLElement {
+    state = {
+        number : 0
+    }
+    setState(name, value){
+        this.state[name] = value;
+        this.render();
+    }
 
     constructor() {
         super();
+        this.domParser = new DOMParser();
+
         this._internals = this.attachInternals();
         this.style.backgroundColor = "darkgray"
         if(!this.style.display){
@@ -12,29 +21,21 @@ class AppTest extends HTMLElement {
         console.log(this.style);
         this.setAttribute("number", "1");
 
-        console.dir(this.getAttributeNode("number"));
-
-        this.number = parseInt(this.getAttribute("number"));
-
-        const [state, setState] = useState(0);
-        this.state = state;
-        this.setState = setState;
+        console.log(this.getAttribute("props"));
 
         this.addEventListener("click", function (event) {
-            console.log(this.number);
-
+            console.log(this.state.number);
             console.dir(event);
 
             console.log(event.target);
 
-            this.setState(this.state() - 1);
+            this.setState("number", this.state.number - 1);
 
-            console.log(this.state());
-
-            this.number = this.number + 1;
+            console.log(this.state);
         })
 
-
+        this.props = this.getAttribute("props");
+        console.log(this.props);
     }
 
     static observedAttributes = ["number"];
@@ -43,23 +44,8 @@ class AppTest extends HTMLElement {
     // 연결 되고 난 후
     connectedCallback(){
         console.log("AppTest 초기 연결");
-        console.dir(this);
 
-        this.innerHTML =
-            `
-            <div style='color: red'>
-                ${test()} <br/>
-                <div>
-                    this.number <br/>
-                    ${this.number}
-                </div>
-                <div>
-                    state <br/>
-                    ${this.state}
-                </div>
-            </div>
-            `
-
+        this.render();
     }
     disconnectedCallback(){
 
@@ -72,48 +58,65 @@ class AppTest extends HTMLElement {
     // 속성의 변화 이후
     attributeChangedCallback(name, oldValue, newValue){
         console.log(`name : ${name}, oldValue : ${oldValue}, newValue : ${newValue}`);
-        this.number = parseInt(newValue);
 
+        this.render();
+    }
+
+    render(){
         this.innerHTML =
             `
             <div style='color: red'>
-                ${test()} <br/>
                 <div>
                     ${this.number}
                 </div>
                 <div>
                     state <br/>
-                    ${this.state}
+                    ${this.state.number}
+                    
                 </div>
             </div>
             `
+        console.log(this.querySelector("div").getAttributeNames());
     }
 }
 
 
 let customElements = window.customElements;
 
-console.log(AppTest.name);
-
-console.log(test());
-
-/*
-customElements.define("AppTest", AppTest);
-*/
-
 customElements.define("app-test", AppTest);
 
-export function App () {
+class App extends HTMLElement {
+    constructor(){
+        super();
+        this._internals = this.attachInternals();
+        if(!this.style.display){
+            this.style.display = "block";
+        }
+    }
 
-    return (
+    connectedCallback(){
+        this.render();
+    }
+
+    attributeChangedCallback(name, newValue, oldValue){
+        this.render();
+    }
+    disconnectedCallback(){
+
+    }
+    adoptedCallback(){
+
+    }
+
+    render(){
+        this.innerHTML = `
+            <div>
+                <strong>App Component Layer</strong>
+                <br/>
+                <app-test/> 
+            </div>
         `
-        <div>
-            <strong>asdf</strong>
-            <br/>
-            yes
-            <app-test style='font-size: 2rem'/>
-        </div>
-        `
-    )
+    }
 }
 
+customElements.define("init-component", App);

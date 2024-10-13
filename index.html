@@ -12,7 +12,11 @@
         </div>
     <script>
 
-        document.getElementById("index").innerHTML = "<init-component></init-component>"
+        const node = document.createElement("init-component");
+
+        document.getElementById("index").appendChild(node);
+
+        //document.getElementById("index").innerHTML = "<init-component/>";
     </script>
     </body>
 </html>

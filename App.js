@@ -9,16 +9,16 @@ class AppTest extends HTMLElement {
         this.render();
     }
 
-    constructor() {
+    constructor(props = {}) {
         super();
         this.domParser = new DOMParser();
+        this._props = props;
 
         this._internals = this.attachInternals();
         this.style.backgroundColor = "darkgray"
         if(!this.style.display){
             this.style.display = "block";
         }
-        console.log(this.style);
         this.setAttribute("number", "1");
 
         console.log(this.getAttribute("props"));
@@ -34,8 +34,6 @@ class AppTest extends HTMLElement {
             console.log(this.state);
         })
 
-        this.props = this.getAttribute("props");
-        console.log(this.props);
     }
 
     static observedAttributes = ["number"];
@@ -72,11 +70,25 @@ class AppTest extends HTMLElement {
                 <div>
                     state <br/>
                     ${this.state.number}
-                    
+                </div>
+                <div>
+                    props A is : ${this._props.a}
+                </div>
+                <div>
+                    props B is : ${this._props.b}
                 </div>
             </div>
             `
-        console.log(this.querySelector("div").getAttributeNames());
+
+    }
+
+
+    set props(value) {
+        this._props = value;
+    }
+
+    get props(){
+        return this._props;
     }
 }
 
@@ -85,13 +97,15 @@ let customElements = window.customElements;
 
 customElements.define("app-test", AppTest);
 
-class App extends HTMLElement {
-    constructor(){
+class InitComponent extends HTMLElement {
+    constructor(props = {}){
         super();
         this._internals = this.attachInternals();
         if(!this.style.display){
             this.style.display = "block";
         }
+
+        this._props = props;
     }
 
     connectedCallback(){
@@ -109,14 +123,70 @@ class App extends HTMLElement {
     }
 
     render(){
+        /*
         this.innerHTML = `
             <div>
                 <strong>App Component Layer</strong>
                 <br/>
-                <app-test/> 
+                <app-test>
+                    <p>Paragraph</p>
+                </app-test> 
+                <form>
+                    <input type="text" value="insert"/>
+                </form>
             </div>
         `
+        */
+
+        this.willHTML = `
+            <div>
+                plain text
+                <strong>App Component Layer</strong>
+                <br/>
+                <app-test>
+                    <p>Paragraph</p>
+                </app-test> 
+                <form>
+                    <input type="text" value="insert"/>
+                </form>
+            </div> 
+        `
+
+        const appTestNode = new AppTest({a : 1, b : 2});
+
+        appTestNode.setAttribute("attr", "fixedAttr");
+
+        appTestNode.setAttribute("on-click", "onChangeNumber");
+
+        const attrs = appTestNode.getAttributeNames();
+
+        attrs.forEach((value) => {
+            const attrValue = appTestNode.getAttribute(value);
+            console.log(attrValue);
+        })
+
+        const parser = new DOMParser();
+
+        const tree = parser.parseFromString(this.willHTML, "text/html").body;
+
+        console.log(tree.childNodes);
+        console.log(tree);
+
+        const nodes = tree.childNodes;
+        nodes.forEach((nd) => {
+            this.appendChild(nd);
+        })
+
+        this.appendChild(appTestNode);
+    }
+
+    set props(value) {
+        this._props = value;
+    }
+
+    get props(){
+        return this._props;
     }
 }
 
-customElements.define("init-component", App);
+customElements.define("init-component", InitComponent);

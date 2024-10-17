@@ -82,7 +82,6 @@ class AppTest extends HTMLElement {
 
     }
 
-
     set props(value) {
         this._props = value;
     }
@@ -123,14 +122,12 @@ class InitComponent extends HTMLElement {
     }
 
     render(){
-
-
         this.willHTML = `
             <div>
                 plain text
                 <strong>App Component Layer</strong>
                 <br/>
-                <app-test/>
+                <app-test></app-test>
                 <form>
                     <input type="text" value="insert"/>
                 </form>
@@ -160,7 +157,7 @@ class InitComponent extends HTMLElement {
 
         console.log(nodes);
 
-        this.innerHTML = this.willHTML;
+        // this.innerHTML = this.willHTML;
     }
 
     set props(value) {

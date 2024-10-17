@@ -123,33 +123,18 @@ class InitComponent extends HTMLElement {
     }
 
     render(){
-        /*
-        this.innerHTML = `
-            <div>
-                <strong>App Component Layer</strong>
-                <br/>
-                <app-test>
-                    <p>Paragraph</p>
-                </app-test> 
-                <form>
-                    <input type="text" value="insert"/>
-                </form>
-            </div>
-        `
-        */
+
 
         this.willHTML = `
             <div>
                 plain text
                 <strong>App Component Layer</strong>
                 <br/>
-                <app-test>
-                    <p>Paragraph</p>
-                </app-test> 
+                <app-test/>
                 <form>
                     <input type="text" value="insert"/>
                 </form>
-            </div> 
+            </div>
         `
 
         const appTestNode = new AppTest({a : 1, b : 2});
@@ -170,14 +155,12 @@ class InitComponent extends HTMLElement {
         const tree = parser.parseFromString(this.willHTML, "text/html").body;
 
         console.log(tree.childNodes);
-        console.log(tree);
 
         const nodes = tree.childNodes;
-        nodes.forEach((nd) => {
-            this.appendChild(nd);
-        })
 
-        this.appendChild(appTestNode);
+        console.log(nodes);
+
+        this.innerHTML = this.willHTML;
     }
 
     set props(value) {
@@ -190,3 +173,5 @@ class InitComponent extends HTMLElement {
 }
 
 customElements.define("init-component", InitComponent);
+
+console.log("init-component -tag name : " + InitComponent.name);

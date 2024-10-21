@@ -113,6 +113,8 @@ class InitComponent extends HTMLElement {
             this.style.display = "block";
         }
 
+        this.style.margin = "2rem";
+
         this._props = props;
     }
 
@@ -150,14 +152,14 @@ class InitComponent extends HTMLElement {
 
         console.log("처리 후 ");
 
-        this.child = null;
+        while(this.firstChild){
+            this.removeChild(this.firstChild);
+        }
 
         // 처리 완료 후 부착
         this.tree.childNodes.forEach((node) => {
             this.appendChild(node);
         })
-
-
     }
 
     onChangeNumber = (e) => {
@@ -228,12 +230,6 @@ class InitComponent extends HTMLElement {
         // 만약 복사되어야 하는 커스텀 targetNode 일 경우, copyNode 로 부터 속성을 이어받고 처리하며,
         // 단순한 태그 노드일 경우, 스스로 속성을 처리한다.
 
-        console.log("targetNode : ");
-        console.log(targetNode);
-        console.dir(targetNode);
-
-        console.log("copyNode : ");
-        console.log(copyNode);
         if(copyNode){
             attrNames = copyNode.getAttributeNames();
             attrNames.forEach((attrName) => {
